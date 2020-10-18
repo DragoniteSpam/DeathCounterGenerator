@@ -1,11 +1,14 @@
 // Emu (c) 2020 @dragonitespam
 // See the Github wiki for documentation: https://github.com/DragoniteSpam/Emu/wiki
-function EmuCheckbox(_x, _y, _w, _h, _text, _value, _callback) : EmuCallback(_x, _y, _w, _h, _value, _callback) constructor {
-    text = _text;
+function EmuCheckbox(x, y, w, h, text, value, callback) : EmuCallback(x, y, w, h, value, callback) constructor {
+    self.text = text;
     
-    box_size = 20;
-    sprite_check = spr_emu_checkbox;
-    color_active = EMU_COLOR_RADIO_ACTIVE;
+    self.box_size = 20;
+    self.sprite_check = spr_emu_checkbox;
+    self.color_active = EMU_COLOR_RADIO_ACTIVE;
+    self.color_hover = EMU_COLOR_HOVER
+    self.color_disabled = EMU_COLOR_DISABLED;
+    self.color_back = EMU_COLOR_BACK;
     
     Render = function(base_x, base_y) {
         processAdvancement();
@@ -31,7 +34,7 @@ function EmuCheckbox(_x, _y, _w, _h, _text, _value, _callback) : EmuCallback(_x,
         var by1 = by - box_size / 2;
         var bx2 = bx + box_size / 2;
         var by2 = by + box_size / 2;
-        var back_color = getMouseHover(x1, y1, x2, y2) ? EMU_COLOR_HOVER : (GetInteractive() ? EMU_COLOR_BACK : EMU_COLOR_DISABLED);
+        var back_color = getMouseHover(x1, y1, x2, y2) ? color_hover : (GetInteractive() ? color_back : color_disabled);
         drawNineslice(1, bx1, by1, bx2, by2, back_color, 1);
         draw_sprite_ext(sprite_check, value, bx, by, 1, 1, 0, color_active, 1);
         drawNineslice(0, bx1, by1, bx2, by2, color, 1);

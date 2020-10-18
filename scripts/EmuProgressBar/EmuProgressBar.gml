@@ -1,22 +1,23 @@
 // Emu (c) 2020 @dragonitespam
 // See the Github wiki for documentation: https://github.com/DragoniteSpam/Emu/wiki
-function EmuProgressBar(_x, _y, _w, _h, _thickness, _min, _max, _draggable, _value, _callback) : EmuCallback(_x, _y, _w, _h, _value, _callback) constructor {
-    thickness = _thickness;
-    value_min = min(_min, _max);
-    value_max = max(_min, _max);
-    draggable = _draggable;
+function EmuProgressBar(x, y, w, h, thickness, value_min, value_max, draggable, value, callback) : EmuCallback(x, y, w, h, value, callback) constructor {
+    self.thickness = thickness;
+    self.value_min = min(value_min, value_max);
+    self.value_max = max(value_min, value_max);
+    self.draggable = draggable;
     
-    integers_only = false;
+    self.color_bar = EMU_COLOR_PROGRESS_BAR;
+    self.color_back = EMU_COLOR_BACK;
     
-    color_bar = EMU_COLOR_PROGRESS_BAR;
-    sprite_bar = spr_emu_progress;
-    sprite_knob = spr_emu_knob;
-    knob_scale = 1.5;
+    self.sprite_bar = spr_emu_progress;
+    self.sprite_knob = spr_emu_knob;
+    self.knob_scale = 1.5;
     
-    currently_dragging = false;
+    self._integers_only = false;
+    self._currently_dragging = false;
     
-    SetIntegersOnly = function(_integers) {
-        integers_only = _integers;
+    SetIntegersOnly = function(integers) {
+        _integers_only = integers;
     }
     
     DrawProgress = function(index, x1, y1, x2, y2, f, c, alpha) {
@@ -72,26 +73,26 @@ function EmuProgressBar(_x, _y, _w, _h, _thickness, _min, _max, _draggable, _val
         if (draggable) {
             if (getMousePressed(x1, y1, x2, y2)) {
                 Activate();
-                currently_dragging = true;
+                _currently_dragging = true;
             }
             
-            if (currently_dragging) {
+            if (_currently_dragging) {
                 if (getMouseHold(0, 0, window_get_width(), window_get_height())) {
                     knob_color = EMU_COLOR_SELECTED;
                     value = clamp((window_mouse_get_x() - bx1) / (bx2 - bx1) * (value_max - value_min) + value_min, value_min, value_max);
-                    if (integers_only) {
+                    if (_integers_only) {
                         value = round(value);
                     }
                     callback();
                 } else {
-                    currently_dragging = false;
+                    _currently_dragging = false;
                 }
             }
         }
         
         var f = clamp((value - value_min) / (value_max - value_min), 0, 1);
         
-        DrawProgress(2, bx1, by1, bx2, by2, 1, EMU_COLOR_BACK, 1);
+        DrawProgress(2, bx1, by1, bx2, by2, 1, color_back, 1);
         DrawProgress(0, bx1, by1, bx2, by2, f, color_bar, 1);
         DrawProgress(1, bx1, by1, bx2, by2, 1, color, 1);
         
