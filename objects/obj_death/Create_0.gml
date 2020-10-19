@@ -4,6 +4,8 @@ img_back = -1;
 img_digits = array_create(10, -1);
 bounds_lower = 0;
 bounds_upper = 100;
+draw_grid = true;
+snap_grid = true;
 
 container = new EmuCore(32, 32, 640, 640);
 
@@ -102,8 +104,19 @@ button_min.SetPrevious(button_max);
 button_max.SetNext(button_min);
 button_max.SetPrevious(button_min);
 
-var button_generate = new EmuButton(window_get_width() / 2, EMU_AUTO, 288, 32, "Generate Images", function() {
+container.AddContent([button_min, button_max]);
+
+var button_draw_grid = new EmuCheckbox(window_get_width() / 2, EMU_AUTO, 288, 32, "Draw Grid", draw_grid, function(value) {
+    obj_death.draw_grid = value;
 });
+
+container.AddContent([button_draw_grid]);
+
+var button_snap_grid = new EmuCheckbox(window_get_width() / 2 + 320, button_draw_grid.y, 288, 32, "Snap to Grid", snap_grid, function(value) {
+    obj_death.snap_grid = value;
+});
+
+container.AddContent([button_snap_grid]);
 
 var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608, 400, function(mx, my) {
     var cx = floor(width / 2);
@@ -119,4 +132,8 @@ var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608
     draw_rectangle_colour(1, 1, width - 1, height - 1, c_black, c_black, c_black, c_black, true);
 }, emu_null, emu_null, emu_null);
 
-container.AddContent([button_min, button_max, button_generate, preview_surface]);
+var button_generate = new EmuButton(window_get_width() / 2, EMU_AUTO, 288, 32, "Generate Images", function() {
+    
+});
+
+container.AddContent([preview_surface, button_generate]);
