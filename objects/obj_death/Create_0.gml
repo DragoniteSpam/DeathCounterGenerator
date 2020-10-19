@@ -11,7 +11,7 @@ grid_size = 32;
 container = new EmuCore(32, 32, 640, 640);
 
 var button_back = new EmuButtonImage(32, EMU_AUTO, 256, 256, -1, 0, c_white, 1, true, function() {
-    var image = load_image();
+    var image = load_image()[0];
     if (sprite_exists(image)) {
         sprite_set_offset(image, sprite_get_width(image) / 2, sprite_get_height(image) / 2);
         if (sprite_exists(sprite)) {
