@@ -33,6 +33,7 @@
     {"id":{"name":"scribble_autotype_get","path":"scripts/scribble_autotype_get/scribble_autotype_get.yy",},"order":3,},
     {"id":{"name":"scribble_set_animation","path":"scripts/scribble_set_animation/scribble_set_animation.yy",},"order":1,},
     {"id":{"name":"fnt_emu_default","path":"fonts/fnt_emu_default/fnt_emu_default.yy",},"order":0,},
+    {"id":{"name":"Group_Code","path":"scripts/Group_Code/Group_Code.yy",},"order":9,},
     {"id":{"name":"scribble_set_glyph_property","path":"scripts/scribble_set_glyph_property/scribble_set_glyph_property.yy",},"order":6,},
     {"id":{"name":"EmuTabGroup","path":"scripts/EmuTabGroup/EmuTabGroup.yy",},"order":14,},
     {"id":{"name":"scribble_get_width","path":"scripts/scribble_get_width/scribble_get_width.yy",},"order":11,},
