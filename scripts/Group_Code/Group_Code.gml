@@ -8,6 +8,7 @@ function load_image() {
 function load_digit(button, index) {
     var image = load_image();
     if (sprite_exists(image)) {
+        sprite_set_offset(image, sprite_get_width(image) / 2, sprite_get_height(image) / 2);
         if (sprite_exists(button.sprite)) {
             if (sprite_exists(button.sprite)) sprite_delete(button.sprite);
         }
