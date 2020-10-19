@@ -102,4 +102,18 @@ button_min.SetPrevious(button_max);
 button_max.SetNext(button_min);
 button_max.SetPrevious(button_min);
 
-container.AddContent([button_min, button_max]);
+var button_generate = new EmuButton(window_get_width() / 2, EMU_AUTO, 288, 32, "Generate Images", function() {
+});
+
+var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608, 320, function() {
+    drawCheckerbox(0, 0, width - 1, height - 1, 1, 1, c_white, 0.5);
+    draw_rectangle_colour(1, 1, width - 1, height - 1, c_black, c_black, c_black, c_black, true);
+    if (sprite_exists(obj_death.img_back)) {
+    } else {
+        scribble_set_box_align(fa_center, fa_middle);
+        scribble_set_wrap(width, height);
+        scribble_draw(floor(width / 2), floor(height / 2), "Preivew will be shown here");
+    }
+}, emu_null, emu_null, emu_null);
+
+container.AddContent([button_min, button_max, button_generate, preview_surface]);
