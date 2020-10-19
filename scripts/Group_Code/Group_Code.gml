@@ -14,5 +14,8 @@ function load_digit(button, index) {
         }
         obj_death.img_digits[@ index] = image;
         button.sprite = image;
+        draw_label = false;
+    } else {
+        draw_label = true;
     }
 };

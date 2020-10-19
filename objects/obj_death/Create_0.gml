@@ -5,7 +5,7 @@ img_digits = array_create(10, -1);
 
 container = new EmuCore(32, 32, 640, 640);
 
-var button_back = new EmuButtonImage(32, EMU_AUTO, 256, 256, -1, 0, c_white, 1, false, function() {
+var button_back = new EmuButtonImage(32, EMU_AUTO, 256, 256, -1, 0, c_white, 1, true, function() {
     var image = load_image();
     if (sprite_exists(image)) {
         sprite_set_offset(image, sprite_get_width(image) / 2, sprite_get_height(image) / 2);
@@ -14,9 +14,12 @@ var button_back = new EmuButtonImage(32, EMU_AUTO, 256, 256, -1, 0, c_white, 1, 
         }
         obj_death.img_back = image;
         sprite = image;
+        draw_label = false;
+    } else {
+        draw_label = true;
     }
 });
-button_back.text = "Background";
+button_back.text = "Click to load background...";
 
 container.AddContent([
     new EmuText(32, 32, 256, 32, "[c_blue]Base Image[/c]"),
