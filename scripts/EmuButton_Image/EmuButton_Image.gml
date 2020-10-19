@@ -5,6 +5,7 @@ function EmuButtonImage(x, y, w, h, sprite, index, blend, alpha, scale_to_fit, c
     self.blend = blend;
     self.alpha = alpha;
     self.fill = scale_to_fit;
+    self.draw_label = true;
     
     self.alignment = fa_center;
     self.valignment = fa_middle;
@@ -43,9 +44,12 @@ function EmuButtonImage(x, y, w, h, sprite, index, blend, alpha, scale_to_fit, c
             draw_sprite_ext(sprite, _index, width / 2, height / 2, scale, scale, 0, blend, alpha);
         }
         
-        scribble_set_box_align(alignment, valignment);
-        scribble_set_wrap(width, height);
-        scribble_draw(width div 2, height div 2, text);
+        if (draw_label) {
+            scribble_set_box_align(alignment, valignment);
+            scribble_set_wrap(width, height);
+            scribble_draw(width div 2, height div 2, text);
+        }
+        
         surface_reset_target();
         #endregion
         
