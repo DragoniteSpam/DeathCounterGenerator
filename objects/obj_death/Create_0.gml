@@ -5,10 +5,22 @@ img_digits = array_create(10, -1);
 
 container = new EmuCore(32, 32, 640, 640);
 
+var button_back = new EmuButtonImage(32, EMU_AUTO, 256, 256, -1, 0, c_white, 1, false, function() {
+    var image = load_image();
+    if (sprite_exists(image)) {
+        sprite_set_offset(image, sprite_get_width(image) / 2, sprite_get_height(image) / 2);
+        if (sprite_exists(sprite)) {
+            if (sprite_exists(sprite)) sprite_delete(sprite);
+        }
+        obj_death.img_back = image;
+        sprite = image;
+    }
+});
+button_back.text = "Background";
+
 container.AddContent([
     new EmuText(32, 32, 256, 32, "[c_blue]Base Image[/c]"),
-    new EmuButton(32, EMU_AUTO, 256, 256, "Background", function() {
-    }),
+    button_back,
     new EmuText(32, EMU_AUTO, 256, 32, "[c_blue]Digit Images[/c]"),
 ]);
 
