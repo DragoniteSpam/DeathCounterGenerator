@@ -2,6 +2,8 @@ randomize();
 
 img_back = -1;
 img_digits = array_create(10, -1);
+bounds_lower = 0;
+bounds_upper = 100;
 
 container = new EmuCore(32, 32, 640, 640);
 
@@ -84,3 +86,20 @@ var button_digit_7 = new EmuButtonImage(416, EMU_AUTO, 96, 64, -1, 0, c_white, 1
 button_digit_7.text = "Digit: 7";
 
 container.AddContent([button_digit_3, button_digit_7]);
+
+var button_min = new EmuInput(window_get_width() / 2, 32, 288, 32, "Lower bound:", "0", "-9999...9999", 5, E_InputTypes.INT, function(value) {
+    obj_death.bounds_lower = real(value);
+});
+button_min.SetRealNumberBounds(-9999, 9999);
+
+var button_max = new EmuInput(window_get_width() / 2 + 320, 32, 288, 32, "Upper bound:", "0", "-9999...9999", 5, E_InputTypes.INT, function(value) {
+    obj_death.bounds_upper = real(value);
+});
+button_max.SetRealNumberBounds(-9999, 9999);
+
+button_min.SetNext(button_max);
+button_min.SetPrevious(button_max);
+button_max.SetNext(button_min);
+button_max.SetPrevious(button_min);
+
+container.AddContent([button_min, button_max]);
