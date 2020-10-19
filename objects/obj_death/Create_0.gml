@@ -131,10 +131,23 @@ container.AddContent([input_grid_size]);
 var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608, 400, function(mx, my) {
     var cx = floor(width / 2);
     var cy = floor(height / 2);
+    if (obj_death.snap_grid) {
+        cx = (cx div obj_death.grid_size) * obj_death.grid_size;
+        cy = (cy div obj_death.grid_size) * obj_death.grid_size;
+    }
     drawCheckerbox(0, 0, width - 1, height - 1, 1, 1, c_white, 0.5);
     if (sprite_exists(obj_death.img_back)) {
         draw_sprite(obj_death.img_back, 0, cx, cy);
-    } else {
+    }
+    if (obj_death.draw_grid) {
+        for (var i = 0; i < width; i += obj_death.grid_size) {
+            draw_line_colour(i, 0, i, height - 1, c_blue, c_blue);
+        }
+        for (var i = 0; i < height; i += obj_death.grid_size) {
+            draw_line_colour(0, i, width - 1, i, c_blue, c_blue);
+        }
+    }
+    if (!sprite_exists(obj_death.img_back)) {
         scribble_set_box_align(fa_center, fa_middle);
         scribble_set_wrap(width, height);
         scribble_draw(floor(cx), floor(cy), "Preivew will be shown here");
