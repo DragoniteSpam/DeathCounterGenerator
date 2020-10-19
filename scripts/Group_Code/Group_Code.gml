@@ -33,7 +33,7 @@ function load_digit(button, index) {
                     }
                     obj_death.img_digits[@ i] = alt_image;
                     alt_button.sprite = alt_image;
-                    draw_label = false;
+                    alt_button.draw_label = false;
                 }
             }
         }

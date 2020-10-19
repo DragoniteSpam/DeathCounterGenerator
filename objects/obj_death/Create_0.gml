@@ -7,6 +7,7 @@ bounds_upper = 100;
 draw_grid = true;
 snap_grid = true;
 grid_size = 32;
+numbers_location = { x: 0, y: 0 };
 
 container = new EmuCore(32, 32, 640, 640);
 
@@ -134,6 +135,7 @@ var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608
     var cx = floor(width / 2);
     var cy = floor(height / 2);
     static numbers = string(irandom_range(10, 99));
+    
     if (obj_death.snap_grid) {
         mx = (mx div obj_death.grid_size) * obj_death.grid_size;
         my = (my div obj_death.grid_size) * obj_death.grid_size;
@@ -157,13 +159,19 @@ var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608
             break;
         }
     }
+    
     if (valid) {
+        if (mx > 0 && mx < width - 1 && my > 0 && my < height - 1 && mouse_check_button(mb_left)) {
+            obj_death.numbers_location.x = round((mx - cx) / obj_death.grid_size) * obj_death.grid_size;
+            obj_death.numbers_location.y = round((my - cy) / obj_death.grid_size) * obj_death.grid_size;
+        }
         var digit_tens = obj_death.img_digits[real(string_char_at(numbers, 1))];
         var digit_ones = obj_death.img_digits[real(string_char_at(numbers, 2))];
         var digit_width = sprite_get_width(digit_tens) + sprite_get_width(digit_ones);
-        var digit_x = cx - digit_width / 2;
-        draw_sprite(digit_tens, 0, digit_x + sprite_get_width(digit_tens) / 2, cy);
-        draw_sprite(digit_ones, 0, digit_x + sprite_get_width(digit_tens) + sprite_get_height(digit_ones) / 2, cy);
+        var digit_x = cx + obj_death.numbers_location.x - digit_width / 2;
+        var digit_y = cx + obj_death.numbers_location.y;
+        draw_sprite(digit_tens, 0, digit_x + sprite_get_width(digit_tens) / 2, digit_y - sprite_get_height(digit_tens) / 2);
+        draw_sprite(digit_ones, 0, digit_x + sprite_get_width(digit_tens) + sprite_get_height(digit_ones) / 2, digit_y - sprite_get_height(digit_ones) / 2);
     }
     if (mouse_check_button_pressed(mb_right)) {
         numbers = string(irandom_range(10, 99));

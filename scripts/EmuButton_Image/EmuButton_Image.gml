@@ -39,7 +39,7 @@ function EmuButtonImage(x, y, w, h, sprite, index, blend, alpha, scale_to_fit, c
         draw_clear_alpha(c_black, 0);
         drawNineslice(1, 0, 0, width, height, color_back, 1);
         if (sprite_exists(sprite)) {
-            drawCheckerbox(0, 0, width - 1, height - 1);
+            drawCheckerbox(0, 0, width - 1, height - 1, 1, 1, c_white, 0.5);
             var scale = fill ? min(width / sprite_get_width(sprite), height / sprite_get_height(sprite)) : 1;
             draw_sprite_ext(sprite, _index, width / 2, height / 2, scale, scale, 0, blend, alpha);
         }
