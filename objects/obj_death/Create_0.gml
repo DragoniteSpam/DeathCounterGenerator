@@ -131,9 +131,10 @@ container.AddContent([input_grid_size]);
 var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608, 400, function(mx, my) {
     var cx = floor(width / 2);
     var cy = floor(height / 2);
+    static numbers = string(irandom_range(10, 99));
     if (obj_death.snap_grid) {
-        cx = (cx div obj_death.grid_size) * obj_death.grid_size;
-        cy = (cy div obj_death.grid_size) * obj_death.grid_size;
+        mx = (mx div obj_death.grid_size) * obj_death.grid_size;
+        my = (my div obj_death.grid_size) * obj_death.grid_size;
     }
     drawCheckerbox(0, 0, width - 1, height - 1, 1, 1, c_white, 0.5);
     if (sprite_exists(obj_death.img_back)) {
@@ -146,6 +147,24 @@ var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608
         for (var i = 0; i < height; i += obj_death.grid_size) {
             draw_line_colour(0, i, width - 1, i, c_blue, c_blue);
         }
+    }
+    var valid = true;
+    for (var i = 0; i < 10; i++) {
+        if (!sprite_exists(obj_death.img_digits[i])) {
+            valid = false;
+            break;
+        }
+    }
+    if (valid) {
+        var digit_tens = obj_death.img_digits[real(string_char_at(numbers, 1))];
+        var digit_ones = obj_death.img_digits[real(string_char_at(numbers, 2))];
+        var digit_width = sprite_get_width(digit_tens) + sprite_get_width(digit_ones);
+        var digit_x = cx - digit_width / 2;
+        draw_sprite(digit_tens, 0, digit_x + sprite_get_width(digit_tens) / 2, cy);
+        draw_sprite(digit_ones, 0, digit_x + sprite_get_width(digit_tens) + sprite_get_height(digit_ones) / 2, cy);
+    }
+    if (mouse_check_button_pressed(mb_right)) {
+        numbers = string(irandom_range(10, 99));
     }
     if (!sprite_exists(obj_death.img_back)) {
         scribble_set_box_align(fa_center, fa_middle);
