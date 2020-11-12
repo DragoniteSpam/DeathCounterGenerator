@@ -6,7 +6,7 @@ bounds_lower = 0;
 bounds_upper = 100;
 draw_grid = true;
 snap_grid = true;
-grid_size = 32;
+grid_size = 16;
 numbers_location = { x: 0, y: 0 };
 
 container = new EmuCore(32, 32, 640, 640);
@@ -127,7 +127,7 @@ container.AddContent([button_snap_grid]);
 input_grid_size = new EmuInput(window_get_width() / 2, EMU_AUTO, 288, 32, "Grid size:", string(grid_size), "1...100", 3, E_InputTypes.INT, function() {
     obj_death.grid_size = real(value);
 });
-input_grid_size.SetRealNumberBounds(1, 100);
+input_grid_size.SetRealNumberBounds(4, 100);
 
 container.AddContent([input_grid_size]);
 
@@ -137,12 +137,12 @@ var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608
     static number = irandom_range(10, 99);
     
     if (obj_death.snap_grid) {
-        mx = (mx / obj_death.grid_size) * obj_death.grid_size;
-        my = (my / obj_death.grid_size) * obj_death.grid_size;
+        mx = round(mx / obj_death.grid_size) * obj_death.grid_size;
+        my = round(my / obj_death.grid_size) * obj_death.grid_size;
     }
     if (mx > 0 && mx < width - 1 && my > 0 && my < height - 1 && mouse_check_button(mb_left)) {
-        obj_death.numbers_location.x = round((mx - cx) / obj_death.grid_size) * obj_death.grid_size;
-        obj_death.numbers_location.y = round((my - cy) / obj_death.grid_size) * obj_death.grid_size;
+        obj_death.numbers_location.x = mx - cx;
+        obj_death.numbers_location.y = my - cy;
     }
     
     drawCheckerbox(0, 0, width - 1, height - 1, 1, 1, c_white, 0.5);
