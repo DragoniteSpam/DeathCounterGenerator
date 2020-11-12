@@ -190,7 +190,16 @@ var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608
 }, emu_null, emu_null, emu_null);
 
 var button_generate = new EmuButton(window_get_width() / 2, EMU_AUTO, 288, 32, "Generate Images", function() {
-    
+    if (obj_death.settings.bounds_upper == obj_death.settings.bounds_lower) return;
+    var path = filename_path(get_save_filename("Image files|*.png", "output.png"));
+    if (path == "") return;
+    gen_index = min(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper);
+    gen_final = max(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper);
+    generating = true;
 });
 
 container.AddContent([preview_surface, button_generate]);
+
+gen_index = 0;
+gen_final = 0;
+generating = false;
