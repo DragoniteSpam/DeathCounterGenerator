@@ -134,47 +134,22 @@ container.AddContent([input_grid_size]);
 var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608, 400, function(mx, my) {
     var cx = floor(width / 2);
     var cy = floor(height / 2);
-    static numbers = string(irandom_range(10, 99));
+    static number = irandom_range(10, 99);
     
     if (obj_death.snap_grid) {
-        mx = (mx div obj_death.grid_size) * obj_death.grid_size;
-        my = (my div obj_death.grid_size) * obj_death.grid_size;
+        mx = (mx / obj_death.grid_size) * obj_death.grid_size;
+        my = (my / obj_death.grid_size) * obj_death.grid_size;
     }
-    drawCheckerbox(0, 0, width - 1, height - 1, 1, 1, c_white, 0.5);
-    if (sprite_exists(obj_death.img_back)) {
-        draw_sprite(obj_death.img_back, 0, cx, cy);
-    }
-    if (obj_death.draw_grid) {
-        for (var i = 0; i < width; i += obj_death.grid_size) {
-            draw_line_colour(i, 0, i, height - 1, c_blue, c_blue);
-        }
-        for (var i = 0; i < height; i += obj_death.grid_size) {
-            draw_line_colour(0, i, width - 1, i, c_blue, c_blue);
-        }
-    }
-    var valid = true;
-    for (var i = 0; i < 10; i++) {
-        if (!sprite_exists(obj_death.img_digits[i])) {
-            valid = false;
-            break;
-        }
+    if (mx > 0 && mx < width - 1 && my > 0 && my < height - 1 && mouse_check_button(mb_left)) {
+        obj_death.numbers_location.x = round((mx - cx) / obj_death.grid_size) * obj_death.grid_size;
+        obj_death.numbers_location.y = round((my - cy) / obj_death.grid_size) * obj_death.grid_size;
     }
     
-    if (valid) {
-        if (mx > 0 && mx < width - 1 && my > 0 && my < height - 1 && mouse_check_button(mb_left)) {
-            obj_death.numbers_location.x = round((mx - cx) / obj_death.grid_size) * obj_death.grid_size;
-            obj_death.numbers_location.y = round((my - cy) / obj_death.grid_size) * obj_death.grid_size;
-        }
-        var digit_tens = obj_death.img_digits[real(string_char_at(numbers, 1))];
-        var digit_ones = obj_death.img_digits[real(string_char_at(numbers, 2))];
-        var digit_width = sprite_get_width(digit_tens) + sprite_get_width(digit_ones);
-        var digit_x = cx + obj_death.numbers_location.x - digit_width / 2;
-        var digit_y = cx + obj_death.numbers_location.y;
-        draw_sprite(digit_tens, 0, digit_x + sprite_get_width(digit_tens) / 2, digit_y - sprite_get_height(digit_tens) / 2);
-        draw_sprite(digit_ones, 0, digit_x + sprite_get_width(digit_tens) + sprite_get_height(digit_ones) / 2, digit_y - sprite_get_height(digit_ones) / 2);
-    }
+    drawCheckerbox(0, 0, width - 1, height - 1, 1, 1, c_white, 0.5);
+    draw_card(number, obj_death.draw_grid, width, height);
+    
     if (mouse_check_button_pressed(mb_right)) {
-        numbers = string(irandom_range(10, 99));
+        number = irandom_range(10, 99);
     }
     if (!sprite_exists(obj_death.img_back)) {
         scribble_set_box_align(fa_center, fa_middle);
