@@ -142,15 +142,8 @@ function draw_card(number, grid, w, h) {
             draw_line_colour(0, i, width - 1, i, c_blue, c_blue);
         }
     }
-    var valid = true;
-    for (var i = 0; i < 10; i++) {
-        if (!sprite_exists(obj_death.img_digits[i])) {
-            valid = false;
-            break;
-        }
-    }
     
-    if (valid) {
+    if (gen_valid()) {
         var digits = array_create(ceil(log10(number)));
         var digits_width = 0;
         var digits_height = 0;
@@ -168,4 +161,12 @@ function draw_card(number, grid, w, h) {
             digit_x += sprite_get_width(digits[i]) + 4;
         }
     }
+};
+
+function gen_valid() {
+    if (!sprite_exists(obj_death.img_back)) return false;
+    for (var i = 0; i < 10; i++) {
+        if (!sprite_exists(obj_death.img_digits[i])) return false;
+    }
+    return true;
 };

@@ -191,6 +191,7 @@ var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608
 
 var button_generate = new EmuButton(window_get_width() / 2, EMU_AUTO, 288, 32, "Generate Images", function() {
     if (obj_death.settings.bounds_upper == obj_death.settings.bounds_lower) return;
+    if (!gen_valid()) return;
     var path = filename_path(get_save_filename("Image files|*.png", "output.png"));
     if (path == "") return;
     gen_index = min(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper);
