@@ -3,16 +3,34 @@ randomize();
 img_back = -1;
 img_digits = array_create(10, -1);
 
-settings = {
-    bounds_lower: 0,
-    bounds_upper: 100,
-    draw_grid: true,
-    snap_grid: true,
-    grid_size: 16,
-    numbers_location: {
-        x: 0,
-        y: 0
-    },
+try {
+    #macro SETTINGS_FILE "settings.json"
+    var settings_buffer = buffer_load(SETTINGS_FILE);
+    var settings_json = buffer_read(settings_buffer, buffer_text);
+    buffer_delete(settings_buffer);
+    settings = json_parse(settings_json);
+} catch (e) {
+    settings = {
+        bounds_lower: 1,
+        bounds_upper: 100,
+        draw_grid: true,
+        snap_grid: true,
+        grid_size: 16,
+        numbers_location: {
+            x: 0,
+            y: 0
+        },
+    };
+    
+    show_debug_message("could not load settings file: " + e.message);
+}
+
+SaveSettings = function() {
+    var settings_json = json_stringify(settings);
+    var settings_buffer = buffer_create(string_length(settings_json), buffer_fixed, 1);
+    buffer_write(settings_buffer, buffer_text, settings_json);
+    buffer_save(settings_buffer, SETTINGS_FILE);
+    buffer_delete(settings_buffer);
 };
 
 container = new EmuCore(32, 32, 640, 640);
@@ -101,11 +119,13 @@ container.AddContent([button_digit[3], button_digit[7]]);
 
 input_min = new EmuInput(window_get_width() / 2, 32, 288, 32, "Lower bound:", string(settings.bounds_lower), "-9999...9999", 5, E_InputTypes.INT, function() {
     obj_death.settings.bounds_lower = real(value);
+    obj_death.SaveSettings();
 });
 input_min.SetRealNumberBounds(-9999, 9999);
 
 input_max = new EmuInput(window_get_width() / 2 + 320, 32, 288, 32, "Upper bound:", string(settings.bounds_upper), "-9999...9999", 5, E_InputTypes.INT, function() {
     obj_death.settings.bounds_upper = real(value);
+    obj_death.SaveSettings();
 });
 input_max.SetRealNumberBounds(-9999, 9999);
 
@@ -119,6 +139,7 @@ container.AddContent([input_min, input_max]);
 var button_draw_grid = new EmuCheckbox(window_get_width() / 2, EMU_AUTO, 288, 32, "Draw Grid", settings.draw_grid, function() {
     obj_death.settings.draw_grid = value;
     obj_death.input_grid_size.interactive = obj_death.settings.snap_grid || obj_death.settings.draw_grid;
+    obj_death.SaveSettings();
 });
 
 container.AddContent([button_draw_grid]);
@@ -126,12 +147,14 @@ container.AddContent([button_draw_grid]);
 var button_snap_grid = new EmuCheckbox(window_get_width() / 2 + 320, button_draw_grid.y, 288, 32, "Snap to Grid", settings.snap_grid, function() {
     obj_death.settings.snap_grid = value;
     obj_death.input_grid_size.interactive = obj_death.settings.snap_grid || obj_death.settings.draw_grid;
+    obj_death.SaveSettings();
 });
 
 container.AddContent([button_snap_grid]);
 
 input_grid_size = new EmuInput(window_get_width() / 2, EMU_AUTO, 288, 32, "Grid size:", string(settings.grid_size), "1...100", 3, E_InputTypes.INT, function() {
     obj_death.settings.grid_size = real(value);
+    obj_death.SaveSettings();
 });
 input_grid_size.SetRealNumberBounds(4, 100);
 
@@ -149,6 +172,7 @@ var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608
     if (mx > 0 && mx < width - 1 && my > 0 && my < height - 1 && mouse_check_button(mb_left)) {
         obj_death.settings.numbers_location.x = mx - cx;
         obj_death.settings.numbers_location.y = my - cy;
+        obj_death.SaveSettings();
     }
     
     drawCheckerbox(0, 0, width - 1, height - 1, 1, 1, c_white, 0.5);
