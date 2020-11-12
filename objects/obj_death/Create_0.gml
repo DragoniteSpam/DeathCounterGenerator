@@ -2,12 +2,18 @@ randomize();
 
 img_back = -1;
 img_digits = array_create(10, -1);
-bounds_lower = 0;
-bounds_upper = 100;
-draw_grid = true;
-snap_grid = true;
-grid_size = 16;
-numbers_location = { x: 0, y: 0 };
+
+settings = {
+    bounds_lower: 0,
+    bounds_upper: 100,
+    draw_grid: true,
+    snap_grid: true,
+    grid_size: 16,
+    numbers_location: {
+        x: 0,
+        y: 0
+    },
+};
 
 container = new EmuCore(32, 32, 640, 640);
 
@@ -93,13 +99,13 @@ button_digit[7].text = "Digit: 7";
 
 container.AddContent([button_digit[3], button_digit[7]]);
 
-input_min = new EmuInput(window_get_width() / 2, 32, 288, 32, "Lower bound:", string(bounds_lower), "-9999...9999", 5, E_InputTypes.INT, function() {
-    obj_death.bounds_lower = real(value);
+input_min = new EmuInput(window_get_width() / 2, 32, 288, 32, "Lower bound:", string(settings.bounds_lower), "-9999...9999", 5, E_InputTypes.INT, function() {
+    obj_death.settings.bounds_lower = real(value);
 });
 input_min.SetRealNumberBounds(-9999, 9999);
 
-input_max = new EmuInput(window_get_width() / 2 + 320, 32, 288, 32, "Upper bound:", string(bounds_upper), "-9999...9999", 5, E_InputTypes.INT, function() {
-    obj_death.bounds_upper = real(value);
+input_max = new EmuInput(window_get_width() / 2 + 320, 32, 288, 32, "Upper bound:", string(settings.bounds_upper), "-9999...9999", 5, E_InputTypes.INT, function() {
+    obj_death.settings.bounds_upper = real(value);
 });
 input_max.SetRealNumberBounds(-9999, 9999);
 
@@ -110,22 +116,22 @@ input_max.SetPrevious(input_min);
 
 container.AddContent([input_min, input_max]);
 
-var button_draw_grid = new EmuCheckbox(window_get_width() / 2, EMU_AUTO, 288, 32, "Draw Grid", draw_grid, function() {
-    obj_death.draw_grid = value;
-    obj_death.input_grid_size.interactive = obj_death.snap_grid || obj_death.draw_grid;
+var button_draw_grid = new EmuCheckbox(window_get_width() / 2, EMU_AUTO, 288, 32, "Draw Grid", settings.draw_grid, function() {
+    obj_death.settings.draw_grid = value;
+    obj_death.input_grid_size.interactive = obj_death.settings.snap_grid || obj_death.settings.draw_grid;
 });
 
 container.AddContent([button_draw_grid]);
 
-var button_snap_grid = new EmuCheckbox(window_get_width() / 2 + 320, button_draw_grid.y, 288, 32, "Snap to Grid", snap_grid, function() {
-    obj_death.snap_grid = value;
-    obj_death.input_grid_size.interactive = obj_death.snap_grid || obj_death.draw_grid;
+var button_snap_grid = new EmuCheckbox(window_get_width() / 2 + 320, button_draw_grid.y, 288, 32, "Snap to Grid", settings.snap_grid, function() {
+    obj_death.settings.snap_grid = value;
+    obj_death.input_grid_size.interactive = obj_death.settings.snap_grid || obj_death.settings.draw_grid;
 });
 
 container.AddContent([button_snap_grid]);
 
-input_grid_size = new EmuInput(window_get_width() / 2, EMU_AUTO, 288, 32, "Grid size:", string(grid_size), "1...100", 3, E_InputTypes.INT, function() {
-    obj_death.grid_size = real(value);
+input_grid_size = new EmuInput(window_get_width() / 2, EMU_AUTO, 288, 32, "Grid size:", string(settings.grid_size), "1...100", 3, E_InputTypes.INT, function() {
+    obj_death.settings.grid_size = real(value);
 });
 input_grid_size.SetRealNumberBounds(4, 100);
 
@@ -136,17 +142,17 @@ var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608
     var cy = floor(height / 2);
     static number = irandom_range(10, 99);
     
-    if (obj_death.snap_grid) {
-        mx = round(mx / obj_death.grid_size) * obj_death.grid_size;
-        my = round(my / obj_death.grid_size) * obj_death.grid_size;
+    if (obj_death.settings.snap_grid) {
+        mx = round(mx / obj_death.settings.grid_size) * obj_death.settings.grid_size;
+        my = round(my / obj_death.settings.grid_size) * obj_death.settings.grid_size;
     }
     if (mx > 0 && mx < width - 1 && my > 0 && my < height - 1 && mouse_check_button(mb_left)) {
-        obj_death.numbers_location.x = mx - cx;
-        obj_death.numbers_location.y = my - cy;
+        obj_death.settings.numbers_location.x = mx - cx;
+        obj_death.settings.numbers_location.y = my - cy;
     }
     
     drawCheckerbox(0, 0, width - 1, height - 1, 1, 1, c_white, 0.5);
-    draw_card(number, obj_death.draw_grid, width, height);
+    draw_card(number, obj_death.settings.draw_grid, width, height);
     
     if (mouse_check_button_pressed(mb_right)) {
         number = irandom_range(10, 99);
