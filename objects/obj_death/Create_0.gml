@@ -125,7 +125,7 @@ var button_snap_grid = new EmuCheckbox(window_get_width() / 2 + 320, button_draw
 container.AddContent([button_snap_grid]);
 
 input_grid_size = new EmuInput(window_get_width() / 2, EMU_AUTO, 288, 32, "Grid size:", string(grid_size), "1...100", 3, E_InputTypes.INT, function() {
-    obj_death.bounds_upper = real(value);
+    obj_death.grid_size = real(value);
 });
 input_grid_size.SetRealNumberBounds(1, 100);
 
