@@ -165,14 +165,16 @@ var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608
     var cy = floor(height / 2);
     static number = irandom_range(10, 99);
     
-    if (obj_death.settings.snap_grid) {
-        mx = round(mx / obj_death.settings.grid_size) * obj_death.settings.grid_size;
-        my = round(my / obj_death.settings.grid_size) * obj_death.settings.grid_size;
-    }
-    if (mx > 0 && mx < width - 1 && my > 0 && my < height - 1 && mouse_check_button(mb_left)) {
-        obj_death.settings.numbers_location.x = mx - cx;
-        obj_death.settings.numbers_location.y = my - cy;
-        obj_death.SaveSettings();
+    if (GetInteractive()) {
+        if (obj_death.settings.snap_grid) {
+            mx = round(mx / obj_death.settings.grid_size) * obj_death.settings.grid_size;
+            my = round(my / obj_death.settings.grid_size) * obj_death.settings.grid_size;
+        }
+        if (mx > 0 && mx < width - 1 && my > 0 && my < height - 1 && mouse_check_button(mb_left)) {
+            obj_death.settings.numbers_location.x = mx - cx;
+            obj_death.settings.numbers_location.y = my - cy;
+            obj_death.SaveSettings();
+        }
     }
     
     drawCheckerbox(0, 0, width - 1, height - 1, 1, 1, c_white, 0.5);
