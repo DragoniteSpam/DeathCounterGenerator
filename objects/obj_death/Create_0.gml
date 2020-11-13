@@ -177,8 +177,12 @@ var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608
         }
     }
     
-    drawCheckerbox(0, 0, width - 1, height - 1, 1, 1, c_white, 0.5);
-    draw_card(number, obj_death.settings.draw_grid, width, height);
+    if (obj_death.generating) {
+        draw_card(obj_death.gen_index, obj_death.settings.draw_grid, width, height);
+    } else {
+        drawCheckerbox(0, 0, width - 1, height - 1, 1, 1, c_white, 0.5);
+        draw_card(number, obj_death.settings.draw_grid, width, height);
+    }
     
     if (mouse_check_button_pressed(mb_right)) {
         number = irandom_range(10, 99);
@@ -196,9 +200,9 @@ var button_generate = new EmuButton(window_get_width() / 2, EMU_AUTO, 288, 32, "
     if (!gen_valid()) return;
     var path = filename_path(get_save_filename("Image files|*.png", "output.png"));
     if (path == "") return;
-    gen_index = min(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper);
-    gen_final = max(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper);
-    generating = true;
+    obj_death.gen_index = min(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper);
+    obj_death.gen_final = max(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper);
+    obj_death.generating = true;
     obj_death.DisableAll();
 });
 
@@ -212,7 +216,7 @@ DisableAll = function() {
 
 EnableAll = function() {
     for (var i = 0; i < ds_list_size(container._contents); i++) {
-        container._contenst[| i].SetInteractive(true);
+        container._contents[| i].SetInteractive(true);
     }
 };
 
