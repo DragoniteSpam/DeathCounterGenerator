@@ -204,7 +204,7 @@ var button_generate = new EmuButton(window_get_width() / 2, EMU_AUTO, 288, 32, "
     if (!gen_valid()) return;
     obj_death.gen_path = filename_path(get_save_filename("Image files|*.png", "output.png"));
     if (obj_death.gen_path == "") return;
-    obj_death.gen_index = min(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper);
+    obj_death.gen_index = min(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper) - 1; // this is ++'d immediately afterwards
     obj_death.gen_final = max(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper);
     obj_death.generating = true;
     obj_death.DisableAll();
