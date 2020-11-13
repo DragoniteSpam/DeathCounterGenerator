@@ -144,7 +144,7 @@ function draw_card(number, grid, w, h) {
     }
     
     if (gen_valid()) {
-        var digits = array_create(ceil(log10(number)));
+        var digits = array_create(ceil(log10(number + 1)));
         var digits_width = 0;
         var digits_height = 0;
         for (var i = 0; i < array_length(digits); i++) {
