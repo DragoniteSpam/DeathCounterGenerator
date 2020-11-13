@@ -197,9 +197,22 @@ var button_generate = new EmuButton(window_get_width() / 2, EMU_AUTO, 288, 32, "
     gen_index = min(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper);
     gen_final = max(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper);
     generating = true;
+    obj_death.DisableAll();
 });
 
 container.AddContent([preview_surface, button_generate]);
+
+DisableAll = function() {
+    for (var i = 0; i < ds_list_size(container._contents); i++) {
+        container._contents[| i].SetInteractive(false);
+    }
+};
+
+EnableAll = function() {
+    for (var i = 0; i < ds_list_size(container._contents); i++) {
+        container._contenst[| i].SetInteractive(true);
+    }
+};
 
 gen_index = 0;
 gen_final = 0;
