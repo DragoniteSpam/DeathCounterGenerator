@@ -1,0 +1,2 @@
+Death by Blair Adams from the Noun Project
+The user interface is made using a library for GameMaker that I wrote a while ago: https://dragonite.itch.io/emu-ui-for-gamemaker

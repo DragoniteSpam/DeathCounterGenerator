@@ -314,6 +314,7 @@
     {"CopyToMask":-1,"filePath":"datafiles/emu","resourceVersion":"1.0","name":"fnt_emu_default.yy","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/emu","resourceVersion":"1.0","name":"fnt_emu_default.yy","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/emu_fonts","resourceVersion":"1.0","name":"fnt_emu_default.yy","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"credits.txt","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "23.1.1.230",
