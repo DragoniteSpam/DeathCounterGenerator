@@ -178,7 +178,11 @@ var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608
     }
     
     if (obj_death.generating) {
-        draw_card(obj_death.gen_index, obj_death.settings.draw_grid, width, height);
+        draw_clear_alpha(c_black, 0);
+        draw_card(obj_death.gen_index, false, width, height);
+        var bw = sprite_get_width(obj_death.img_back);
+        var bh = sprite_get_height(obj_death.img_back);
+        surface_save_part(_surface, obj_death.gen_path + string(obj_death.gen_index) + ".png", cx - bw / 2, cy - bh / 2, bw, bh);
     } else {
         drawCheckerbox(0, 0, width - 1, height - 1, 1, 1, c_white, 0.5);
         draw_card(number, obj_death.settings.draw_grid, width, height);
@@ -198,8 +202,8 @@ var preview_surface = new EmuRenderSurface(window_get_width() / 2, EMU_AUTO, 608
 var button_generate = new EmuButton(window_get_width() / 2, EMU_AUTO, 288, 32, "Generate Images", function() {
     if (obj_death.settings.bounds_upper == obj_death.settings.bounds_lower) return;
     if (!gen_valid()) return;
-    var path = filename_path(get_save_filename("Image files|*.png", "output.png"));
-    if (path == "") return;
+    obj_death.gen_path = filename_path(get_save_filename("Image files|*.png", "output.png"));
+    if (obj_death.gen_path == "") return;
     obj_death.gen_index = min(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper);
     obj_death.gen_final = max(obj_death.settings.bounds_lower, obj_death.settings.bounds_upper);
     obj_death.generating = true;
@@ -220,6 +224,7 @@ EnableAll = function() {
     }
 };
 
+gen_path = "";
 gen_index = 0;
 gen_final = 0;
 generating = false;
