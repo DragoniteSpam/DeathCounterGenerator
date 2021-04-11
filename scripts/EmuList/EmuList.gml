@@ -26,6 +26,7 @@ function EmuList(x, y, w, h, text, element_height, content_slots, callback) : Em
     self._index_last = -1;
     self._click_x = -1;
     self._click_y = -1;
+    self._own_entries = true;
     
     self._selected_entries = { };
     self._surface = -1;
@@ -68,7 +69,7 @@ function EmuList(x, y, w, h, text, element_height, content_slots, callback) : Em
     }
     
     Clear = function() {
-        if (own_entries) {
+        if (_own_entries) {
             ds_list_clear(_entries);
         } else {
             throw new EmuException("Trying to clear a list owned by someone else", "Please do not clear a list using an external list for its _entries.");
@@ -166,7 +167,7 @@ function EmuList(x, y, w, h, text, element_height, content_slots, callback) : Em
         _index = clamp(n - slots, 0, _index);
         
         if (n == 0) {
-            drawNineslice(1, 0, 0, x2 - x1, element_height, color_disabled, 1);
+            draw_sprite_stretched_ext(sprite_nineslice, 1, 0, 0, x2 - x1, element_height, color_disabled, 1);
             ty = mean(y2, y2 + height);
             scribble_set_box_align(fa_left, fa_center);
             scribble_set_wrap(width, height);
@@ -367,7 +368,7 @@ function EmuList(x, y, w, h, text, element_height, content_slots, callback) : Em
     
     Destroy = function() {
         destroyContent();
-        if (own_entries) ds_list_destroy(_entries);
+        if (_own_entries) ds_list_destroy(_entries);
         if (_surface != -1) surface_free(_surface);
     }
 }

@@ -16,10 +16,6 @@ function EmuColorPicker(x, y, w, h, text, value, callback) : EmuCallback(x, y, w
     
     self.color_back = EMU_COLOR_BACK;
     
-    self.sprite_crosshair = spr_emu_mask_crosshair;
-    self.sprite_mask_bar_h = spr_emu_mask_bar_h;
-    self.sprite_mask_bar_v = spr_emu_mask_bar_v;
-        
     SetAlphaUsed = function(_alpha_used) {
         _allow_alpha = _alpha_used;
     }
@@ -54,10 +50,10 @@ function EmuColorPicker(x, y, w, h, text, value, callback) : EmuCallback(x, y, w
         scribble_set_wrap(width, height);
         scribble_draw(tx, ty, text);
         
-        drawNineslice(1, vx1 + 1, vy1 + 1, vx2 - 1, vy2 - 1, color_back, 1);
+        draw_sprite_stretched_ext(sprite_nineslice, 1, vx1 + 1, vy1 + 1, vx2 - vx1 - 1, vy2 - vy1 - 1, color_back, 1);
         drawCheckerbox(vx1 + 2, vy1 + 2, (vx2 - vx1) - 4, (vy2 - vy1) - 4);
-        drawNineslice(1, vx1 + 2, vy1 + 2, vx2 - 2, vy2 - 2, value, _allow_alpha ? (((value & 0xff000000) >> 24) / 0xff) : 1);
-        drawNineslice(0, vx1 + 1, vy1 + 1, vx2 - 1, vy2 - 1, color, 1);
+        draw_sprite_stretched_ext(sprite_nineslice, 1, vx1 + 2, vy1 + 2, vx2 - vx1 - 2, vy2 - vy1 - 2, value, _allow_alpha ? (((value & 0xff000000) >> 24) / 0xff) : 1);
+        draw_sprite_stretched_ext(sprite_nineslice, 0, vx1 + 1, vy1 + 1, vx2 - vx1 - 1, vy2 - vy1 - 1, color, 1);
         
         if (GetInteractive()) {
             if (getMouseHover(vx1, vy1, vx2, vy2)) {
@@ -78,7 +74,7 @@ function EmuColorPicker(x, y, w, h, text, value, callback) : EmuCallback(x, y, w
                     var yy = 64;
                     var spacing = 16;
                     
-                    static controls = function(x, y, w, h, value, allow_alpha, callback) : EmuCallback(x, y, w, h, value, callback) constructor {
+                    var controls = function(x, y, w, h, value, allow_alpha, callback) : EmuCallback(x, y, w, h, value, callback) constructor {
                         enum EmuColorChannels { R, G, B, A }
                         
                         self.axis_value = 0;
@@ -95,6 +91,10 @@ function EmuColorPicker(x, y, w, h, text, value, callback) : EmuCallback(x, y, w
                         self._color_y = 0;
                         self._main_size = 176;
                         self._selecting_color = false;
+                        
+                        self.sprite_crosshair = spr_emu_mask_crosshair;
+                        self.sprite_mask_bar_h = spr_emu_mask_bar_h;
+                        self.sprite_mask_bar_v = spr_emu_mask_bar_v;
                         
                         self._axis_x = self._color_x + self._main_size + 16;
                         self._axis_y = self._color_y;
@@ -308,9 +308,10 @@ function EmuColorPicker(x, y, w, h, text, value, callback) : EmuCallback(x, y, w
                     
                     dialog.el_picker_code = new EmuInput(32, 32, ew, eh, "Color:", emu_string_hex(((value & 0xff0000) >> 16) | (value & 0x00ff00) | (value & 0x0000ff) << 16, 6), "RRGGBB", 6, E_InputTypes.HEX, function() {
                         if (string_length(value) == 6) {
-                            var value_as_real = emu_hex(value);
+                            var value_as_real = emu_hex(string_copy(value, 5, 2) + string_copy(value, 3, 2) + string_copy(value, 1, 2));
                             root.el_picker.SetValue(((value_as_real & 0xff0000) >> 16) | (value_as_real & 0x00ff00) | (value_as_real & 0x0000ff) << 16);
-                        root.base_color_element.value = value_as_real | (floor(alpha * 0xff) << 24);
+                            root.base_color_element.value = value_as_real | (floor(root.el_picker.alpha * 0xff) << 24);
+                            root.base_color_element.callback();
                         }
                     });
                     dialog.el_picker_code.SetInputBoxPosition(vx1, vy1, vx2, vy2);
@@ -348,6 +349,5 @@ function EmuColorPicker(x, y, w, h, text, value, callback) : EmuCallback(x, y, w
     
     Destroy = function() {
         destroyContent();
-        if (surface_exists(_surface)) surface_free(_surface);
     }
 }

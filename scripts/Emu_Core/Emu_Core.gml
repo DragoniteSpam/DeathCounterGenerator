@@ -141,29 +141,6 @@ function EmuCore(x, y, w, h) constructor {
         // assign the element's "tooltip" text to be drawn on the UI somewhere
     }
     
-    drawNineslice = function(_index, x1, y1, x2, y2, color, alpha) {
-        color = (color != undefined) ? color : c_white;
-        alpha = (alpha != undefined) ? alpha : 1;
-        var w = x2 - x1;
-        var h = y2 - y1;
-        var sw = sprite_get_width(sprite_nineslice) / 3;
-        var sh = sprite_get_height(sprite_nineslice) / 3;
-        
-        draw_sprite_general(sprite_nineslice, _index, 0, 0, sw, sh, x1, y1, 1, 1, 0, color, color, color, color, alpha);
-        draw_sprite_general(sprite_nineslice, _index, 2 * sw, 0, sw, sh, x1 + w - sw, y1, 1, 1, 0, color, color, color, color, alpha);
-        draw_sprite_general(sprite_nineslice, _index, 2 * sw, 2 * sh, sw, sh, x1 + w - sw, y1 + h - sh, 1, 1, 0, color, color, color, color, alpha);
-        draw_sprite_general(sprite_nineslice, _index, 0, 2 * sh, sw, sh, x1, y1 + h - sh, 1, 1, 0, color, color, color, color, alpha);
-        
-        var hxscale = (w - 2 * sw) / sw;
-        var vyscale = (h - 2 * sh) / sh;
-        
-        draw_sprite_general(sprite_nineslice, _index, sw, 0, sw, sh, x1 + sw, y1, hxscale, 1, 0, color, color, color, color, alpha);
-        draw_sprite_general(sprite_nineslice, _index, sw, sh * 2, sw, sh, x1 + sw, y1 + h - sh, hxscale, 1, 0, color, color, color, color, alpha);
-        draw_sprite_general(sprite_nineslice, _index, 0, sh, sw, sh, x1, y1 + sh, 1, vyscale, 0, color, color, color, color, alpha);
-        draw_sprite_general(sprite_nineslice, _index, 2 * sw, sh, sw, sh, x1 + w - sw, y1 + sh, 1, vyscale, 0, color, color, color, color, alpha);
-        draw_sprite_general(sprite_nineslice, _index, sw, sh, sw, sh, x1 + sw, y1 + sh, hxscale, vyscale, 0, color, color, color, color, alpha);
-    }
-    
     drawCheckerbox = function(_x, _y, _w, _h, _xscale, _yscale, _color, _alpha) {
         if (_xscale == undefined) _xscale = 1;
         if (_yscale == undefined) _yscale = 1;
@@ -261,15 +238,15 @@ function EmuCallback(x, y, w, h, value, callback) : EmuCore(x, y, w, h) construc
         self.callback = method(self, callback);
     }
     
-    setCallbackMiddle = function(callback) {
+    SetCallbackMiddle = function(callback) {
         self.callback_middle = method(self, callback);
     }
     
-    setCallbackRight = function(callback) {
+    SetCallbackRight = function(callback) {
         self.callback_right = method(self, callback);
     }
     
-    setCallbackDouble = function(callback) {
+    SetCallbackDouble = function(callback) {
         self.callback_double = method(self, callback);
     }
     
@@ -280,9 +257,9 @@ function EmuCallback(x, y, w, h, value, callback) : EmuCore(x, y, w, h) construc
     SetCallback(callback);
     SetValue(value);
     
-    setCallbackMiddle(emu_null);
-    setCallbackRight(emu_null);
-    setCallbackDouble(emu_null);
+    SetCallbackMiddle(emu_null);
+    SetCallbackRight(emu_null);
+    SetCallbackDouble(emu_null);
 }
 
 function emu_null() { }
